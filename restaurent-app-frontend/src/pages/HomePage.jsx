@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../componens/header";
+import Header from "../componens/Header";
 import SidebarMenu from "../componens/sidebar-menu";
 
 function HomePage() {
@@ -10,3 +10,5 @@ function HomePage() {
         </>
     )
 }
+
+export default HomePage;

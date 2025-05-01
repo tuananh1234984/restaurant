@@ -8,15 +8,32 @@ import team from "../assets/images/team.jpg";
 function Login() {
     const [passwordVisible, setPasswordVisible] = React.useState(false);
     const navigate = useNavigate();
-    const validate = () => {
+    const validate = async () => {
         const username = document.getElementById("username").value;
         const password = document.getElementById("password-field").value;
 
         if (username === '' || password === ''){
             window.alert("Vui lòng đăng nhập đầy đủ thông tin");
-        }else{
-            //Xử lý đăng nhập tại đây, ví dụ gọi API
-            console.log('Đăng nhập với', username, password);
+            return;
+        }
+        try {
+            const response = await fetch("http://localhost:8080/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, password }),
+            });
+            const result = await response.json();
+            if (response.ok) {
+                window.alert("✅ " + result.message);
+                navigate("/HomePage");
+            }else{
+                window.alert("❌ " + result.message);
+            }
+        }catch (error){
+            console.error(error);
+            window.alert("Lỗi kết nối server")
         }
     };
 //show - hide mật khẩu
@@ -55,7 +72,7 @@ function Login() {
                             </div>
                             <div className="wrap-input100 validate-input">
                                 <input autoComplete="off" className="input100" type={passwordVisible ? "text" : "password"} placeholder="Mật khẩu" name="password" id="password-field"/>
-                                <span onToggle={togglePasswordVisibility} className="bx fa-fw bx-hide field-icon click-eye"></span>
+                                <span onClick={togglePasswordVisibility} className="bx fa-fw bx-hide field-icon click-eye"></span>
                                 <span className="focus-input100"></span>
                                 <span className="symbol-input100">
                                     <i className="bx bx-key"></i>
