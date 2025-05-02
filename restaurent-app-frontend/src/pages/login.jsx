@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "jquery-ui/ui/widgets/datepicker";
 import "../utils/util.css";
 import "../style/login.css";
@@ -84,16 +85,16 @@ function Login() {
                             </div>
                             {/* LINK TÌM MẬT KHẨU  */}
                             <div className="text-right p-t-12">
-                                <a className="txt2" onClick={() => navigate("/forgot-password")}>
+                                <Link className="txt2" to={"/forgot-password"}>
                                     Bạn quên mật khẩu?
-                                </a>
+                                </Link>
                             </div>
                         </form>
                         {/* Footer  */}
                         <div className="text-center p-t-70 txt2">
                             Phần mềm quản lý bán hàng  <i className="far fa-copyright" aria-hidden="true"></i>
                             {new Date().getFullYear()}{" "}
-                            <a className="txt2"></a>
+                            <a className="txt2" href="https://www.facebook.com/hoangphamit" target="_blank" rel="noreferrer"></a>
                         </div>
                     </form>
                 </div>
