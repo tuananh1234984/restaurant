@@ -13,7 +13,7 @@ const SidebarMenu = () => {
         <>
         <div className="app-sider__overlay" data-toggel="sidebar"></div>
         <aside className="app-sidebar">
-            <div className="app-sidebar__user">{user && ( <><img className="app-sidebar__userx-avatar" src={user.avatar} alt="User Image" style={{width: "50px"}}></img></>)}
+            <div className="app-sidebar__user">{user && ( <><img className="app-sidebar__userx-avatar" src={user.avatar} alt="User" style={{width: "50px"}}></img></>)}
                 <div>
                     <p className="app-sidebar__user-name">{user && user.name}</p>
                     <p className="app-sidebar_user-designation">Chào mừng bạn trở lợi</p>

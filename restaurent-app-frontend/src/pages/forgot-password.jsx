@@ -1,18 +1,17 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import "../utils/util.css";
 import "../style/login.css";
-import login from "../pages/login";
+import { Link } from "react-router-dom";
 import fg from "../assets/images/fg-img.png";
 
 function Forgotpassword () {
     const [email, setEmail] = React.useState("");
-    const [message, setMessage] = React.useState("");
-    const navigate = useNavigate();
+    const [setMessage] = React.useState("");
+    
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (email === "") {
+        if (email.trim() === "") {
             setMessage("Vui lòng nhập email");
         } else {
             console.log("Gửi yêu cầu khôi phục tới: ", email);
@@ -45,9 +44,9 @@ function Forgotpassword () {
                                     <input type="button" onClick="return RegexEmail('emailInput')" value="Lấy mật khẩu"/>
                                 </div>
                                 <div className="text-center p-t-12">
-                                    <a className="txt2" onClick={() => navigate("/login")}>
+                                    <Link to={"/Login"} className="txt2">
                                         Trở về đăng nhập
-                                    </a>
+                                    </Link>
                                 </div>
                             </form>
                             <div className="text-center p-t-70 txt2">
