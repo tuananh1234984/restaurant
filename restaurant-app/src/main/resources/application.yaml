@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: "jdbc:sqlserver://DESKTOP-OCSHGB8\\SQL2022DEV:1433;databaseName=restaurant_db;encrypt=true;trustServerCertificate=true"
+    username: sa
+    password: Tuananh_1098
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.SQLServerDialect
