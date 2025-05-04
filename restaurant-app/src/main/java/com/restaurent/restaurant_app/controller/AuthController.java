@@ -12,13 +12,13 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:3000")
 
 public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
     @PostMapping("/login")
+    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         Optional<User> userOpt = userRepository.findByUsername(loginRequest.getUsername());
 
@@ -33,6 +33,7 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
         String username = request.get("username");
         Optional<User> userOpt = userRepository.findByUsername(username);
