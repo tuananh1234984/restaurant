@@ -24,7 +24,9 @@ public class WebConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll() // Cho phép login, register,...
                 .anyRequest().authenticated()
-            );
+            )
+            .formLogin(basic -> basic.disable())
+            .httpBasic(basic -> basic.disable());
 
         return http.build();
     }
