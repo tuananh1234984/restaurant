@@ -27,15 +27,16 @@ function Login() {
                 credentials: "include",
             });
             const isJson = response.headers.get("content-type")?.includes("application/json");
-            const result = isJson ? await response.json() : null;
+            const result = isJson ? await response.json() : {};
             if (response.ok) {
                 window.alert("✅ " + result.message);
                 navigate("/HomePage");
             }else{
-                window.alert("❌ " + result.message);
+                const message = result.message || `Lỗi ${response.status} : ${response.statusText}`;
+                window.alert("❌ " + message);
             }
         }catch (error){
-            console.error(error);
+            console.error("login error", error);
             window.alert("Lỗi kết nối server")
         }
     };
