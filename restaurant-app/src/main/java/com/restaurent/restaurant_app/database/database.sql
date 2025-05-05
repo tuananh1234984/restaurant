@@ -3,7 +3,7 @@ GO
 
 USE restaurant_db;
 GO
-
+DROP TABLE IF EXISTS Users;
 CREATE TABLE Users (
     Id INT PRIMARY KEY IDENTITY(1,1),
     Username NVARCHAR(100),

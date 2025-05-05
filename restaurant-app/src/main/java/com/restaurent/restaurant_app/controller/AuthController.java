@@ -21,7 +21,8 @@ public class AuthController {
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         Optional<User> userOpt = userRepository.findByUsername(loginRequest.getUsername());
-
+        System.out.println("Username: " + loginRequest.getUsername());
+        System.out.println("Password: " + loginRequest.getPassword());
         if (userOpt.isPresent()) {
             if(userOpt.get().getPassword().equals(loginRequest.getPassword())) {
                 return ResponseEntity.ok(new ApiPesponse(true, "Login successful", userOpt.get()));
