@@ -15,3 +15,6 @@ GO
 
 INSERT INTO Users (Username, Password, Email) VALUES (N'admin', N'admin123', N'admin@example.com');
 GO
+
+SELECT * FROM Users;
+GO
