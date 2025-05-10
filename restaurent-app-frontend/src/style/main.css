@@ -631,7 +631,7 @@ mark,
     padding: 5px;
 }
 
-.app-menu__item {
+.app-menu_item {
     position: relative;
     display: flex;
     align-items: center;
@@ -646,7 +646,14 @@ mark,
     transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
-.app-menu__item.active, .app-menu__item:hover, .app-menu__item:focus {
+.app-menu_label {
+    white-space: nowrap;
+    flex: 1 1 auto;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.app-menu_item.active, .app-menu_item:hover, .app-menu_item:focus {
     background: #c6defd;
     text-decoration: none;
     color: rgb(22 22 72);
