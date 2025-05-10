@@ -1,13 +1,14 @@
 spring:
   datasource:
-    url: jdbc:sqlserver://myrestaurant.database.windows.net:1433;database=Restaurant;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
-    username: Shy@myrestaurant
+    url: jdbc:sqlserver://mysrestaurant.database.windows.net:1433;database=Restuarant;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+    username: Shy@mysrestaurant
     password: Tuananh_1098
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
   jpa:
     hibernate:
       ddl-auto: none
+    show-sql: true
     database-platform: org.hibernate.dialect.SQLServerDialect
 
   logging:
