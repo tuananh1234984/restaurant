@@ -4,7 +4,11 @@ import "../style/main.css";
 
 const SidebarMenu = () => {
     const [user, setUser] = useState(null);
+    const [isFixed, setIsFixed] = useState(false);
 
+    const handleLinkClick = () => {
+        setIsFixed(true);
+    }
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
@@ -14,7 +18,7 @@ const SidebarMenu = () => {
     return (
         <>
         <div className="app-sidebar__overlay" data-toggel="sidebar"></div>
-        <aside className="app-sidebar">
+        <aside className={isFixed ? "app-sidebar fixed" : "app-sidebar"} >
             <div className="app-sidebar__user">{user && ( <><img className="app-sidebar__user-avatar" src={user.avatar} alt="User" style={{width: "50px"}}></img></>)}
                 <div>
                     <p className="app-sidebar__user-name">{user && user.name}</p>
@@ -35,7 +39,7 @@ const SidebarMenu = () => {
                     <span className="app-menu_label">Quản lý sản phẩm</span></a></li>
                 <li><a className="app-menu_item " href="index.html"><i className="app-menu_icon bx bx-task"></i>
                     <span className="app-menu_label">Quản lý đơn hàng</span></a></li>
-                <li><Link className="app-menu_item " to={"/InternalManagement"}><i className="app-menu_icon bx bx-run"></i>
+                <li><Link className="app-menu_item " to="/InternalManagement" onClick={handleLinkClick}><i className="app-menu_icon bx bx-run"></i>
                     <span className="app-menu_label">Quản lý nội bộ</span></Link></li>
                 <li><a className="app-menu_item " href="index.html"><i className="app-menu_icon bx bx-dollar"></i>
                     <span className="app-menu_label">Bảngs kê lương</span></a></li>

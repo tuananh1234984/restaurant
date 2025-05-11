@@ -1,7 +1,7 @@
 USE restaurant_db;
 GO
 
-CREATE TABLE SanctionForm (
+CREATE TABLE sanction (
     id INT PRIMARY KEY IDENTITY(1,1),
     fullname NVARCHAR(100),
     dob NVARCHAR(100),
@@ -11,4 +11,5 @@ CREATE TABLE SanctionForm (
 );
 GO
 
-SELECT * FROM SanctionForm;
+
+SELECT * FROM sanction;

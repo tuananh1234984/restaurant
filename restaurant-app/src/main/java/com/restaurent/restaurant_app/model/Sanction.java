@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "sanction")
 @Getter
 @Setter
 @NoArgsConstructor

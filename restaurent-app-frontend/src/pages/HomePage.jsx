@@ -5,10 +5,10 @@ import SidebarMenu from "../componens/sidebar-menu";
 function HomePage() {
     return (
         <>
-            <Header />
-            <SidebarMenu />
+            <Header/>
+            <SidebarMenu/>
         </>
-    )
-}
+    );
+};
 
 export default HomePage;
