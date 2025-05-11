@@ -10,7 +10,7 @@ const SanctionTable = () => {
     }, []);
 
     const fetchSanctions = async () => {
-        const response = await axios.get('http://localhost:8080/api/auth/sanction');
+        const response = await axios.get('http://localhost:8080/api/auth/SanctionForm');
         setSanction(response.data);
     };
 

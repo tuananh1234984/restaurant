@@ -4,7 +4,6 @@ import Login from "./pages/login.jsx";
 import Forgotpassword from "./pages/forgot-password.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import InternalManagement from "./pages/InternalManagement.jsx";
-import SanctionForm from "./componens/SanctionForm.jsx";
 
 function App() {
   return (
@@ -15,7 +14,6 @@ function App() {
         <Route path="/forgot-password" element={<Forgotpassword />} />
         <Route path="/HomePage" element={<HomePage />} />
         <Route path="/InternalManagement" element={<InternalManagement />} />
-        <Route path="/SanctionForm/create" element={<SanctionForm />} />
       </Routes>
     </Router>
   );
