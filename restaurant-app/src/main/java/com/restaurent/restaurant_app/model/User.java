@@ -14,6 +14,7 @@ public class User {
     private String password;
     private String email;
     private String role;
+    private byte[] avatar;
 
     public Long getId() {
         return id;
@@ -53,5 +54,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public byte[] getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(byte[] avatar) {
+        this.avatar = avatar;
     }
 }

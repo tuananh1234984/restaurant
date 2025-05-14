@@ -12,6 +12,8 @@ const InternalManagement = () => {
     const [isFixed, setIsFixed] = useState(false);
     const [data, setData] = useState([]);
     const tableRef = useRef(null);
+    const fileInputRef = useRef(null); // Thêm ref cho input file
+
     const handleLinkClick = () => {
         setIsFixed(true);
     };
@@ -31,13 +33,21 @@ const InternalManagement = () => {
     };
 
     const handlePrint = () => {
-        const printContents = tableRef.current.innerHTML;
-        const printWindow = window.open("", "", "height=600, width=800");
-        printWindow.document.write("<html><head><title>Print</title></head><body>");
+        if (!tableRef.current) {
+            alert("Không tìm thấy bảng dữ liệu để in!");
+            return;
+        }
+        const printContents = tableRef.current.outerHTML;
+        const printWindow = window.open("", "", "height=600,width=800");
+        printWindow.document.write("<html><head><title>Print</title>");
+        printWindow.document.write('<link rel="stylesheet" href="/path/to/your/table/styles.css">');
+        printWindow.document.write("</head><body>");
         printWindow.document.write(printContents);
         printWindow.document.write("</body></html>");
         printWindow.document.close();
+        printWindow.focus();
         printWindow.print();
+        printWindow.close();
     };
 
     const handleCopy = () => {
@@ -72,6 +82,11 @@ const InternalManagement = () => {
             setData([]);
         }
     };
+
+    // Sửa lại hàm này: chỉ trigger click vào input file
+    const handleUploadClick = () => {
+        fileInputRef.current.click();
+    };
         
     return (
         <main className={`app-content ${isFixed ? "fixed" : ""}`}>
@@ -90,7 +105,18 @@ const InternalManagement = () => {
                                     <Link className="btn btn-add btn-sm" to="/SanctionForm" onClick={handleLinkClick} title="Thêm"><i className="fas fa-plus"></i>Tạo mới</Link>
                                 </div>
                                 <div className="col-sm-2">
-                                    <a className="btn btn-delete btn-sm nhap-tu-file" type="button" title="Nhập" onClick={handleUpload}><i className="fas fa-file-upload"></i>Tải từ file</a>
+                                    {/* Nút bấm sẽ trigger input file */}
+                                    <a className="btn btn-delete btn-sm nhap-tu-file" type="button" title="Nhập" onClick={handleUploadClick}>
+                                        <i className="fas fa-file-upload"></i>Tải từ file
+                                    </a>
+                                    {/* Input file ẩn */}
+                                    <input
+                                        type="file"
+                                        accept=".xlsx, .xls"
+                                        ref={fileInputRef}
+                                        style={{ display: "none" }}
+                                        onChange={handleUpload}
+                                    />
                                 </div>
                                 <div className="col-sm-2">
                                     <a className="btn btn-delete btn-sm print-file" type="button" title="In" onClick={handlePrint}><i className="fas fa-print"></i>In dữ liệu</a>
@@ -112,7 +138,7 @@ const InternalManagement = () => {
                     </div>
                 </div>
             </div>
-            <SanctionTable />
+            <SanctionTable tableRef={tableRef} data={data} />
         </main>
     );
 };

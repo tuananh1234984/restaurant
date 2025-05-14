@@ -1,4 +1,5 @@
 import React, { useState} from "react";
+import "../style/main.css";
 
 const SanctionForm = ({ onSubmit }) => {
     const [form, setForm] = useState({
@@ -17,7 +18,8 @@ const SanctionForm = ({ onSubmit }) => {
     };
 
     const handleSubmit = (e) => {
-        if (onsubmit) onSubmit(form);
+        e.preventDefault();
+        if (onSubmit) onSubmit(form);
         setForm({
             name: '',
             birthday: '',
@@ -47,22 +49,18 @@ const SanctionForm = ({ onSubmit }) => {
                                     </button>
                                 </div>
                             </div>
-                            <form className="row">
+                            <form className="row" onSubmit={handleSubmit}>
                                 <div className="form-group col-md-4">
                                     <label className="control-label">Họ và tên</label>
                                     <input className="form-control" type="text" name="name" value={form.name} onChange={handleChange}/>
                                 </div>
                                 <div className="form-group col-md-4">
-                                    <label className="control-label">Họ và tên</label>
+                                    <label className="control-label">Ngày sinh</label>
                                     <input className="form-control" type="date" name="birthday" value={form.birthday} onChange={handleChange}/>
                                 </div>
                                 <div className="form-group col-md-4">
-                                    <label className="control-label">Họ và tên</label>
-                                    <input className="form-control"  name="position" value={form.position} onChange={handleChange}/>
-                                </div>
-                                <div className="form-group col-md-4">
-                                    <label className="control-label">Họ và tên</label>
-                                    <select className="form-control" type="text" name="name" value={form.name} onChange={handleChange}>
+                                    <label className="control-label">Chức vụ</label>
+                                    <select className="form-control" type="text" name="position" value={form.position} onChange={handleChange}>
                                         <option value="">-- Chọn chức vụ --</option>
                                         <option>Bán hàng</option>
                                         <option>Tư vấn</option>
