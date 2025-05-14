@@ -6,7 +6,7 @@ import fg from "../assets/images/fg-img.png";
 
 function Forgotpassword () {
     const [email, setEmail] = React.useState("");
-    const [setMessage] = React.useState("");
+    const [message, setMessage] = React.useState("");
     
 
     const handleSubmit = (e) => {
@@ -41,7 +41,7 @@ function Forgotpassword () {
                                     </span>
                                 </div>
                                 <div className="container-login100-form-btn">
-                                    <input type="button" onClick="return RegexEmail('emailInput')" value="Lấy mật khẩu"/>
+                                    <input type="submit" value="Lấy mật khẩu"/>
                                 </div>
                                 <div className="text-center p-t-12">
                                     <Link to={"/Login"} className="txt2">

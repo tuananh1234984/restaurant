@@ -2,25 +2,22 @@ import React, {useEffect, useState} from "react";
 import "../style/main.css";
 import axios from "axios";
 
-const SanctionTable = () => {
-    const [sanction, setSanction] = useState([]);
-
-    useEffect(() => {
-        fetchSanctions();
-    }, []);
-
-    const fetchSanctions = async () => {
-        const response = await axios.get('http://localhost:8080/api/auth/SanctionForm');
-        setSanction(response.data);
-    };
-
-    const deleteSanction = async (id) => {
-        await axios.delete(`http://localhost:8080/api/auth/sanction/${id}`);
-        fetchSanctions();
+const SanctionTable = ({ tableRef, data }) => {
+    const deleteSanction = (id) => {
+        // Implement the logic for deleting a sanction, e.g., making an API call
+        axios.delete(`/api/sanctions/${id}`)
+            .then(response => {
+                console.log("Sanction deleted successfully:", response.data);
+                // Optionally, refresh the data or update the UI
+            })
+            .catch(error => {
+                console.error("Error deleting sanction:", error);
+            });
     };
 
     return (
-        <table className="table table-hover table-bordered">
+    <div>
+        <table ref={tableRef} className="table table-hover table-bordered">
             <thead>
                 <tr>
                     <th><input type="checkbox"/></th>
@@ -33,24 +30,31 @@ const SanctionTable = () => {
                 </tr>
             </thead>
             <tbody>
-                {sanction.map((s, idx) => (
-                    <tr key={idx}>
-                        <td><input type="checkbox"/></td>
-                        <td>{s.name}</td>
-                        <td>{s.birthDate}</td>
-                        <td>{s.position}</td>
-                        <td>{s.reason}</td>
-                        <td>
-                            <span className={`badge ${s.status === 'Sa thải' ? 'bg-danger' : 'bg-success'}`}>{s.status}</span>
-                        </td>
-                        <td>
-                            <button className="btn btn-primary btn-sm" onClick={() => deleteSanction(s.id)}>Xóa</button>
-                            <button className="btn btn-primary btn-sm">Sửa</button>
-                        </td>
+                {data && data.length > 0 ? (
+                    data.map((row, idx) => (
+                        <tr key={idx}>
+                            <td><input type="checkbox"/></td>
+                            <td>{row.name}</td>
+                            <td>{row.birthDate}</td>
+                            <td>{row.position}</td>
+                            <td>{row.reason}</td>
+                            <td>
+                                <span className={`badge ${row.status === 'Sa thải' ? 'bg-danger' : 'bg-success'}`}>{row.status}</span>
+                            </td>
+                            <td>
+                                <button className="btn btn-primary btn-sm" onClick={() => deleteSanction(row.id)}>Xóa</button>
+                                <button className="btn btn-primary btn-sm">Sửa</button>
+                            </td>
+                        </tr>
+                    ))
+                ) : (
+                    <tr>
+                        <td colSpan={7}>Không có dữ liệu</td>
                     </tr>
-                ))}
+                )}
             </tbody>
         </table>
+    </div>
     );
 };
 

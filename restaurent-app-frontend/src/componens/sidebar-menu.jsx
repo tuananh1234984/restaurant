@@ -1,9 +1,11 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import "../style/main.css";
 
 const SidebarMenu = () => {
     const [user, setUser] = useState(null);
+    const fileInputRef =  useRef(null);
     const [isFixed, setIsFixed] = useState(false);
 
     const handleLinkClick = () => {
@@ -15,11 +17,37 @@ const SidebarMenu = () => {
             setUser(JSON.parse(storedUser));
         }
     }, []);
+
+    useEffect(() => {
+        if (user && user.username) {
+            axios.get(`http://localhost:8080/api/auth/user/avatar?username=${user.username}`, {responseType: "arraybuffer"})
+                .then(res => {
+                    const blob = new Blob([res.data], {type: "image/jpeg"});
+                    setUser(pre => ({...pre, avatar: URL.createObjectURL(blob)}));
+                })
+                .catch(() => {});
+        }
+    }, [user && user.username]);
+
+    const handleAvatarChange = async (event) => {
+        const file = event.target.file[0];
+        if (!file || !user) return;
+        const formData = new FormData();
+        formData.append("file", file)
+        formData.append("username", user.username);
+        await axios.post("http://localhost:8080/api/auth/user/avatar", formData);
+        const newAvatar = URL.createObjectURL(file);
+        const updatedUser = {...user, avatar: newAvatar};
+        setUser(updatedUser);
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+    };
     return (
         <>
         <div className="app-sidebar__overlay" data-toggel="sidebar"></div>
         <aside className={isFixed ? "app-sidebar fixed" : "app-sidebar"} >
-            <div className="app-sidebar__user">{user && ( <><img className="app-sidebar__user-avatar" src={user.avatar} alt="User" style={{width: "50px"}}></img></>)}
+            <div className="app-sidebar__user">
+                <img className="app-sidebar__user-avatar" src={user?.avatar || "/default-avatar.png" } alt="User" style={{width: "50px", cursor: "pointer", objectFit: "cover", borderRadius: "50%"}} onClick={() => fileInputRef.current.click()} title="Đổi ảnh đại diện"/>
+                <input type="file" accept="image/*" ref={fileInputRef} style={{display: "none"}} onChange={handleAvatarChange}></input>
                 <div>
                     <p className="app-sidebar__user-name">{user && user.name}</p>
                     <p className="app-sidebar_user-designation">Chào mừng bạn trở lại</p>

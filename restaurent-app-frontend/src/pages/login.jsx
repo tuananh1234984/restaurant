@@ -8,13 +8,12 @@ import team from "../assets/images/team.jpg";
 
 function Login() {
     const [passwordVisible, setPasswordVisible] = React.useState(false);
+    const [username, setUsername] = React.useState("");
+    const [password, setPassword] = React.useState("");
     const navigate = useNavigate();
     const validate = async () => {
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password-field").value;
-
         if (username === '' || password === ''){
-            window.alert("Vui lòng đăng nhập đầy đủ thông tin");
+            window.alert("Vui lòng nhập đầy đủ thông tin");
             return;
         }
         try {
@@ -41,14 +40,8 @@ function Login() {
         }
     };
 //show - hide mật khẩu
-    const togglePasswordVisibility= () => {
+    const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);
-        const passwordField = document.getElementById("password-field");
-        if (passwordField.type === "password") {
-            passwordField.type = "text";
-        } else {
-            passwordField.type = "password";
-        }
     }
 
     return(
@@ -66,16 +59,15 @@ function Login() {
                             <b>ĐĂNG NHẬP HỆ THỐNG POS</b>
                         </span>
                         {/* FORM INPUT TÀI KHOẢN VÀ PASSWORD  */}
-                        <form action="">
                             <div className="wrap-input100 validate-input">
-                                <input className="input100" type="text" placeholder="Tài khoản quản trị" name="username" id="username"/>
+                                <input className="input100" type="text" placeholder="Tài khoản quản trị" name="username" value={username} onChange={e => setUsername(e.target.value)} />
                                 <span className="focus-input100"></span>
                                 <span className="symbol-input100">
                                     <i className="bx bx-user"></i>
                                 </span>
                             </div>
                             <div className="wrap-input100 validate-input">
-                                <input autoComplete="off" className="input100" type={passwordVisible ? "text" : "password"} placeholder="Mật khẩu" name="password" id="password-field"/>
+                                <input autoComplete="off" className="input100" type={passwordVisible ? "text" : "password"} placeholder="Mật khẩu" name="password" value={password} onChange={e => setPassword(e.target.value)} />
                                 <span onClick={togglePasswordVisibility} className="bx fa-fw bx-hide field-icon click-eye"></span>
                                 <span className="focus-input100"></span>
                                 <span className="symbol-input100">
@@ -92,7 +84,6 @@ function Login() {
                                     Bạn quên mật khẩu?
                                 </Link>
                             </div>
-                        </form>
                         {/* Footer  */}
                         <div className="text-center p-t-70 txt2">
                             Phần mềm quản lý bán hàng  <i className="far fa-copyright" aria-hidden="true"></i>
