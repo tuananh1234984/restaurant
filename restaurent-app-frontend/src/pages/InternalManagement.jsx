@@ -134,6 +134,28 @@ const InternalManagement = () => {
                                     <a className="btn btn-delete btn-sm" type="button" title="Xóa tất cả" onClick={handleDeleteAll}><i className="fas fa-trash-alt"></i>Xóa tất cả</a>
                                 </div>
                             </div>
+                            <div id="sampleTable-wrapper" className="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                                <div className="row">
+                                    <div className="col-sm-12 col-md-6">
+                                        <div className="dataTables_length" id="sampleTable_length">
+                                            <label>
+                                                "Hiện"
+                                                <select className="sampleTable_length" aria-controls="sampleTable" class="form-control form-control-sm">
+                                                    <option value="10">10</option>
+                                                    <option value="25">25</option>
+                                                    <option value="50">50</option>
+                                                    <option value="100">100</option>
+                                                </select>
+                                                "danh mục"
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="sol-sm-12">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
