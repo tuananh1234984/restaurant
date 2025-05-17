@@ -1,17 +1,17 @@
 spring:
   datasource:
-    url: jdbc:sqlserver://mysrestaurant.database.windows.net:1433;database=Restuarant;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
-    username: Shy@mysrestaurant
+    url: jdbc:sqlserver://DESKTOP-OCSHGB8:1435;databaseName=restaurant_db;encrypt=true;trustServerCertificate=true;
+    username: sa
     password: Tuananh_1098
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
   jpa:
+    database: sql_server
     hibernate:
-      ddl-auto: none
+      ddl-auto: none  # hoặc none tùy nhu cầu
     show-sql: true
     database-platform: org.hibernate.dialect.SQLServerDialect
 
   logging:
     level:
       org.springframework.security: DEBUG
-

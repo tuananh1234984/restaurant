@@ -1,4 +1,5 @@
 import React, { useState} from "react";
+import axios from "axios";
 import "../style/main.css";
 
 const SanctionForm = ({ onSubmit }) => {
@@ -17,16 +18,22 @@ const SanctionForm = ({ onSubmit }) => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (onSubmit) onSubmit(form);
-        setForm({
-            name: '',
-            birthday: '',
-            position: '',
-            reason: '',
-            status: '',
-        });
+        try {
+            // Gửi dữ liệu lên backend
+            const res = await axios.post("/api/auth/sanction", form);
+            if (onSubmit) onSubmit(res.data); // Truyền dữ liệu vừa lưu về cho component cha
+            setForm({
+                name: '',
+                birthday: '',
+                position: '',
+                reason: '',
+                status: '',
+            });
+        } catch (error) {
+            alert("Lưu thất bại!");
+        }
     };
 
     return(
