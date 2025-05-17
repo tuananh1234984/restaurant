@@ -1,18 +1,29 @@
-import React, { useState, useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import SanctionForm from "../componens/SanctionForm";
 import SanctionTable from "../componens/SanctionTable";
 import Clock from "../componens/Clock";
-
+import axios from "axios";
 
 const InternalManagement = () => {
     const [isFixed, setIsFixed] = useState(false);
     const [data, setData] = useState([]);
     const tableRef = useRef(null);
     const fileInputRef = useRef(null); // Thêm ref cho input file
+
+    // Lấy dữ liệu từ backend khi load trang
+    useEffect(() => {
+        axios.get("http://localhost:8080/api/auth/sanction").then(res => setData(res.data));
+    }, []);
+
+    // Khi thêm mới thành công, cập nhật bảng
+    const handleAddSanction = (newSanction) => {
+        setData(prev => [newSanction, ...prev]);
+    };
 
     const handleLinkClick = () => {
         setIsFixed(true);
@@ -134,32 +145,11 @@ const InternalManagement = () => {
                                     <a className="btn btn-delete btn-sm" type="button" title="Xóa tất cả" onClick={handleDeleteAll}><i className="fas fa-trash-alt"></i>Xóa tất cả</a>
                                 </div>
                             </div>
-                            <div id="sampleTable-wrapper" className="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
-                                <div className="row">
-                                    <div className="col-sm-12 col-md-6">
-                                        <div className="dataTables_length" id="sampleTable_length">
-                                            <label>
-                                                "Hiện"
-                                                <select className="sampleTable_length" aria-controls="sampleTable" class="form-control form-control-sm">
-                                                    <option value="10">10</option>
-                                                    <option value="25">25</option>
-                                                    <option value="50">50</option>
-                                                    <option value="100">100</option>
-                                                </select>
-                                                "danh mục"
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="sol-sm-12">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <SanctionForm onSubmit={handleAddSanction} />
             <SanctionTable tableRef={tableRef} data={data} />
         </main>
     );
