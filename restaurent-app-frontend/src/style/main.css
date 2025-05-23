@@ -848,7 +848,7 @@ mark,
 
 .element-button {
     position: relative;
-    border-bottom: 1px solid #ddd;
+    /*border-bottom: 1px solid #ddd;*/
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
@@ -1134,4 +1134,63 @@ div.dataTables_wrapper div.dataTables_filter input {
 }
 .btn-action.edit:hover {
     background: #ffd59c;
+}
+
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+}
+
+.table-bordered {
+    border: 1px solid #dee2e6;
+}
+
+table.dataTable {
+    clear: both;
+    margin-top: 6px !important;
+    margin-bottom: 6px !important;
+    max-width: none !important;
+}
+
+table {
+    font-family: 'Roboto', sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table th {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table-bordered th {
+    border: 1px solid #dee2e6;
+}
+
+.table-bordered thead th {
+    border-bottom-width: 2px;
+}
+
+table.table-bordered.dataTable th {
+    border-left-width: 0;
+}
+
+table.dataTable th {
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+table.dataTable thead .sorting_asc {
+    cursor: pointer;
+    position: relative;
+    outline: none !important;
+    background: #eee;
 }
