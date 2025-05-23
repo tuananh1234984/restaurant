@@ -88,7 +88,9 @@ function Login() {
                         <div className="text-center p-t-70 txt2">
                             Phần mềm quản lý bán hàng  <i className="far fa-copyright" aria-hidden="true"></i>
                             {new Date().getFullYear()}{" "}
-                            <a className="txt2" href="https://www.facebook.com/hoangphamit" target="_blank" rel="noreferrer"></a>
+                            <a className="txt2" href="https://www.facebook.com/hoangphamit" target="_blank" rel="noreferrer">
+                                Facebook
+                            </a>
                         </div>
                     </form>
                 </div>

@@ -27,7 +27,7 @@ const SidebarMenu = () => {
                 })
                 .catch(() => {});
         }
-    }, [user && user.username]);
+    }, [user]);
 
     const handleAvatarChange = async (event) => {
         const file = event.target.file[0];
@@ -46,7 +46,14 @@ const SidebarMenu = () => {
         <div className="app-sidebar__overlay" data-toggel="sidebar"></div>
         <aside className={isFixed ? "app-sidebar fixed" : "app-sidebar"} >
             <div className="app-sidebar__user">
-                <img className="app-sidebar__user-avatar" src={user?.avatar || "/default-avatar.png" } alt="User" style={{width: "50px", cursor: "pointer", objectFit: "cover", borderRadius: "50%"}} onClick={() => fileInputRef.current.click()} title="Đổi ảnh đại diện"/>
+                <img
+                  className="app-sidebar__user-avatar"
+                  src={user?.avatar || "https://ui-avatars.com/api/?name=User&background=ddd&color=555"}
+                  alt="User"
+                  style={{width: "50px", cursor: "pointer", objectFit: "cover", borderRadius: "50%"}}
+                  onClick={() => fileInputRef.current.click()}
+                  title="Đổi ảnh đại diện"
+                />
                 <input type="file" accept="image/*" ref={fileInputRef} style={{display: "none"}} onChange={handleAvatarChange}></input>
                 <div>
                     <p className="app-sidebar__user-name">{user && user.name}</p>

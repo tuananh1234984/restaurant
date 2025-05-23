@@ -12,6 +12,7 @@ import axios from "axios";
 const InternalManagement = () => {
     const [isFixed, setIsFixed] = useState(false);
     const [data, setData] = useState([]);
+    const [showForm, setShowForm] = useState(false);
     const tableRef = useRef(null);
     const fileInputRef = useRef(null); // Thêm ref cho input file
 
@@ -23,9 +24,11 @@ const InternalManagement = () => {
     // Khi thêm mới thành công, cập nhật bảng
     const handleAddSanction = (newSanction) => {
         setData(prev => [newSanction, ...prev]);
+        setShowForm(false); // Ẩn form sau khi thêm
     };
 
     const handleLinkClick = () => {
+        setShowForm(true); // Hiện form khi bấm "Tạo mới"
         setIsFixed(true);
     };
 
@@ -113,13 +116,14 @@ const InternalManagement = () => {
                         <div className="tile-body">
                             <div className="row element-button">
                                 <div className="col-sm-2">
-                                    <Link className="btn btn-add btn-sm" to="/SanctionForm" onClick={handleLinkClick} title="Thêm"><i className="fas fa-plus"></i>Tạo mới</Link>
+                                    <button className="btn btn-add btn-sm" onClick={handleLinkClick} title="Thêm">
+                                        <i className="fas fa-plus"></i>Tạo mới
+                                    </button>
                                 </div>
                                 <div className="col-sm-2">
-                                    {/* Nút bấm sẽ trigger input file */}
-                                    <a className="btn btn-delete btn-sm nhap-tu-file" type="button" title="Nhập" onClick={handleUploadClick}>
+                                    <button className="btn btn-delete btn-sm nhap-tu-file" type="button" title="Nhập" onClick={handleUploadClick}>
                                         <i className="fas fa-file-upload"></i>Tải từ file
-                                    </a>
+                                    </button>
                                     {/* Input file ẩn */}
                                     <input
                                         type="file"
@@ -130,26 +134,39 @@ const InternalManagement = () => {
                                     />
                                 </div>
                                 <div className="col-sm-2">
-                                    <a className="btn btn-delete btn-sm print-file" type="button" title="In" onClick={handlePrint}><i className="fas fa-print"></i>In dữ liệu</a>
+                                    <button className="btn btn-delete btn-sm print-file" type="button" title="In" onClick={handlePrint}>
+                                        <i className="fas fa-print"></i>In dữ liệu
+                                    </button>
                                 </div> 
                                 <div className="col-sm-2">
-                                    <a className="btn btn-delete btn-sm print-file js-testareaccopybtn" type="button" title="Sao chép" onClick={handleCopy}><i className="fas fa-copy"></i>Sao chép</a>
+                                    <button className="btn btn-delete btn-sm print-file js-testareaccopybtn" type="button" title="Sao chép" onClick={handleCopy}>
+                                        <i className="fas fa-copy"></i>Sao chép
+                                    </button>
                                 </div>
                                 <div className="col-sm-2">
-                                    <a className="btn btn-excel btn-sm" type="button" title="Xuat Excel" onClick={handleExportExcel}><i className="fas fa-file-excel"></i>Xuất Excel</a>
+                                    <button className="btn btn-excel btn-sm" type="button" title="Xuất Excel" onClick={handleExportExcel}>
+                                        <i className="fas fa-file-excel"></i>Xuất Excel
+                                    </button>
                                 </div>
                                 <div className="col-sm-2">
-                                    <a className="btn btn-delete btn-sm pdf-file" type="button" title="In" onClick={handleExportPDF}><i className="fas fa-file-pdf"></i>Xuat PDF</a>
+                                    <button className="btn btn-delete btn-sm pdf-file" type="button" title="Xuất PDF" onClick={handleExportPDF}>
+                                        <i className="fas fa-file-pdf"></i>Xuất PDF
+                                    </button>
                                 </div>
                                 <div className="col-sm-2">
-                                    <a className="btn btn-delete btn-sm" type="button" title="Xóa tất cả" onClick={handleDeleteAll}><i className="fas fa-trash-alt"></i>Xóa tất cả</a>
+                                    <button className="btn btn-delete btn-sm" type="button" title="Xóa tất cả" onClick={handleDeleteAll}>
+                                        <i className="fas fa-trash-alt"></i>Xóa tất cả
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <SanctionForm onSubmit={handleAddSanction} />
+            {/* Chỉ render form khi showForm = true */}
+            {showForm && (
+                <SanctionForm onSubmit={handleAddSanction} />
+            )}
             <SanctionTable tableRef={tableRef} data={data} />
         </main>
     );

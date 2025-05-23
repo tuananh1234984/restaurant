@@ -31,4 +31,8 @@ public class SanctionServiceImpl implements SanctionService {
     public List<Sanction> getAllSanction() {
         return repository.findAll();
     }
+    @Override
+    public void deleteSanction(Long id) {
+        repository.deleteById(id);
+    }
 }

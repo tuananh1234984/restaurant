@@ -41,7 +41,7 @@ const SanctionForm = ({ onSubmit }) => {
             <div className="app-title">
                 <ul className="app-breadcrumb breadcrumb">
                     <li className="breadcrumb-item">Quản lý nội bộ</li>
-                    <li className="breadcrumb-item"><a href="#">Tạo mới</a></li>
+                    <li className="breadcrumb-item"><span>Tạo mới</span></li>
                 </ul>
             </div>
             <div className="row">
