@@ -43,7 +43,7 @@ const SanctionTable = ({ tableRef, data }) => {
     };
 
     return (
-        <div>
+        <div className="tile">
             <div className="row mb-2">
                 <div className="col-sm-6">
                     <label>
@@ -76,16 +76,16 @@ const SanctionTable = ({ tableRef, data }) => {
                     </label>
                 </div>
             </div>
-            <table ref={tableRef} className="table table-hover table-bordered" style={{borderRadius: 12, overflow: "hidden", background: "#fff"}}>
+            <table ref={tableRef} className="table table-hover table-bordered dataTable" >
                 <thead>
                     <tr>
-                        <th style={{width: 40}}><input type="checkbox" /></th>
-                        <th>Họ và Tên</th>
-                        <th>Ngày sinh</th>
-                        <th>Chức vụ</th>
-                        <th>Lý do cấm</th>
-                        <th>Tình trạng</th>
-                        <th>Chức năng</th>
+                        <th className="sorting_asc" style={{width: "13px"}}><input type="checkbox" /></th>
+                        <th className="sorting_asc">Họ và Tên</th>
+                        <th className="sorting_asc">Ngày sinh</th>
+                        <th className="sorting_asc">Chức vụ</th>
+                        <th className="sorting_asc">Lý do cấm</th>
+                        <th className="sorting_asc">Tình trạng</th>
+                        <th className="sorting_asc">Chức năng</th>
                     </tr>
                 </thead>
                 <tbody>
