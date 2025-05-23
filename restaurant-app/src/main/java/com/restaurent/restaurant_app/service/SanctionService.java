@@ -8,5 +8,5 @@ import java.util.List;
 public interface SanctionService {
     Sanction createSanction(SanctionDTO dto);
     List<Sanction> getAllSanction();
-    
-} 
+    void deleteSanction(Long id);
+}

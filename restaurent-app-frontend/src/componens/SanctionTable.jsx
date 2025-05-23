@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "../style/main.css";
-
 import axios from "axios";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
@@ -22,63 +21,68 @@ const SanctionTable = ({ tableRef, data }) => {
     const pagedData = filteredData.slice(0, pageSize);
 
     const deleteSanction = (id) => {
-        axios.delete(`/api/sanctions/${id}`)
+        if (!id) {
+            alert("ID không hợp lệ!");
+            return;
+        }
+        axios.delete(`http://localhost:8080/api/auth/sanction/${id}`, { withCredentials: true })
             .then(response => {
-                console.log("Sanction deleted successfully:", response.data);
-                // Optionally, refresh the data or update the UI
+                // Xử lý cập nhật lại bảng dữ liệu nếu cần
             })
             .catch(error => {
                 console.error("Error deleting sanction:", error);
+                alert("Xóa thất bại: " + (error.response?.data?.message || error.message));
             });
+    };
+
+    // Badge màu cho tình trạng
+    const getStatusBadge = (status) => {
+        if (status === "Sa thải") return <span className="badge badge-danger" style={{background: "#ffd6d6", color: "#e74c3c", borderRadius: 6, padding: "4px 12px"}}>Sa thải</span>;
+        if (status === "Khóa tài khoản") return <span className="badge badge-warning" style={{background: "#f7f7b6", color: "#7f8c1f", borderRadius: 6, padding: "4px 12px"}}>Khóa tài khoản</span>;
+        return <span className="badge badge-secondary">{status}</span>;
     };
 
     return (
         <div>
-            <div className="row">
-                <div className="col-sm-12 col-md-6">
-                    <div className="dataTables_length" id="sampleTable_length"> 
-                        <label>
-                            Hiện
-                            <select
-                                className="form-control form-control-sm"
-                                name="sampleTable_length"
-                                aria-controls="sampleTable"
-                                style={{ width: 80 }}
-                                value={pageSize}
-                                onChange={e => setPageSize(Number(e.target.value))}
-                            >
-                                <option value={5}>5</option>
-                                <option value={10}>10</option>
-                                <option value={25}>25</option>
-                                <option value={50}>50</option>
-                                <option value={100}>100</option>
-                            </select>
-                            danh mục
-                        </label>
-                    </div>
+            <div className="row mb-2">
+                <div className="col-sm-6">
+                    <label>
+                        Hiện
+                        <select
+                            className="form-control form-control-sm d-inline-block mx-2"
+                            style={{ width: 80 }}
+                            value={pageSize}
+                            onChange={e => setPageSize(Number(e.target.value))}
+                        >
+                            <option value={5}>5</option>
+                            <option value={10}>10</option>
+                            <option value={25}>25</option>
+                            <option value={50}>50</option>
+                            <option value={100}>100</option>
+                        </select>
+                        danh mục
+                    </label>
                 </div>
-                <div className="col-md-6 col-sm-12">
-                    <div className="dataTables_filter" id="sampleTable_filter">
-                        <label>
-                            Tìm Kiếm:
-                                <input
-                                    type="search"
-                                    className="form-control form-control-sm"
-                                    aria-controls="sampleTable"
-                                    value={search}
-                                    onChange={e => setSearch(e.target.value)}
-                                />
-                        </label>
-                    </div>
+                <div className="col-sm-6 text-right">
+                    <label>
+                        Tìm kiếm:
+                        <input
+                            type="search"
+                            className="form-control form-control-sm d-inline-block ml-2"
+                            style={{ width: "auto" }}
+                            value={search}
+                            onChange={e => setSearch(e.target.value)}
+                        />
+                    </label>
                 </div>
             </div>
-            <table ref={tableRef} className="table table-hover table-bordered">
+            <table ref={tableRef} className="table table-hover table-bordered" style={{borderRadius: 12, overflow: "hidden", background: "#fff"}}>
                 <thead>
                     <tr>
-                        <th><input type="checkbox" /></th>
+                        <th style={{width: 40}}><input type="checkbox" /></th>
                         <th>Họ và Tên</th>
                         <th>Ngày sinh</th>
-                        <th>chức vụ</th>
+                        <th>Chức vụ</th>
                         <th>Lý do cấm</th>
                         <th>Tình trạng</th>
                         <th>Chức năng</th>
@@ -90,15 +94,25 @@ const SanctionTable = ({ tableRef, data }) => {
                             <tr key={idx}>
                                 <td><input type="checkbox" /></td>
                                 <td>{row.name}</td>
-                                <td>{row.birthDate}</td>
+                                <td>{row.birthday || row.birthDate}</td>
                                 <td>{row.position}</td>
                                 <td>{row.reason}</td>
+                                <td>{getStatusBadge(row.status)}</td>
                                 <td>
-                                    <span className={`badge ${row.status === 'Sa thải' ? 'bg-danger' : 'bg-success'}`}>{row.status}</span>
-                                </td>
-                                <td>
-                                    <button className="btn btn-primary btn-sm" onClick={() => deleteSanction(row.id)}>Xóa</button>
-                                    <button className="btn btn-primary btn-sm">Sửa</button>
+                                    <button
+                                        className="btn-action delete"
+                                        title="Xóa"
+                                        onClick={() => deleteSanction(row.id)}
+                                    >
+                                        <i className="fas fa-trash-alt"></i>
+                                    </button>
+                                    <button
+                                        className="btn-action edit"
+                                        title="Sửa"
+                                        // onClick={...} // Thêm hàm sửa nếu có
+                                    >
+                                        <i className="fa fa-edit"></i>
+                                    </button>
                                 </td>
                             </tr>
                         ))

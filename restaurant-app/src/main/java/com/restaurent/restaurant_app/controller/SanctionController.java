@@ -25,4 +25,9 @@ public class SanctionController {
     public List<Sanction> getAllSanction() {
         return sanctionService.getAllSanction();
     }
+
+    @DeleteMapping("/sanction/{id}")
+    public void deleteSanction(@PathVariable Long id) {
+        sanctionService.deleteSanction(id);
+    }
 }

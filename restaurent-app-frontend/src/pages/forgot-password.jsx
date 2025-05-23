@@ -49,6 +49,7 @@ function Forgotpassword () {
                                     </Link>
                                 </div>
                             </form>
+                            {message && <div className="alert alert-info">{message}</div>}
                             <div className="text-center p-t-70 txt2">
                                 Phần mềm quản trị nhà hàng <i className="fa fa-copyright" aria-hidden="true"></i>
                                 {new Date().getFullYear()}{" "}
