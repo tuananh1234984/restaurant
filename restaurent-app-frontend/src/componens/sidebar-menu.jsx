@@ -77,7 +77,7 @@ const SidebarMenu = () => {
                 <li><Link className="app-menu_item " to="/InternalManagement" onClick={handleLinkClick}><i className="app-menu_icon bx bx-run"></i>
                     <span className="app-menu_label">Quản lý nội bộ</span></Link></li>
                 <li><a className="app-menu_item " href="index.html"><i className="app-menu_icon bx bx-dollar"></i>
-                    <span className="app-menu_label">Bảngs kê lương</span></a></li>
+                    <span className="app-menu_label">Bảng kê lương</span></a></li>
                 <li><a className="app-menu_item " href="index.html"><i className="app-menu_icon bx bx-pie-chart-alt-2"></i>
                     <span className="app-menu_label">Báo cáo doanh thu</span></a></li>
                 <li><a className="app-menu_item " href="index.html"><i className="app-menu_icon bx bx-calendar-check"></i>

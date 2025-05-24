@@ -4,8 +4,8 @@ import "../style/main.css";
 
 const SanctionForm = ({ onSubmit }) => {
     const [form, setForm] = useState({
-        name: '',
-        birthday: '',
+        fullname: '',
+        dob: '',
         position: '',
         reason: '',
         status: '',
@@ -25,8 +25,8 @@ const SanctionForm = ({ onSubmit }) => {
             const res = await axios.post("/api/auth/sanction", form);
             if (onSubmit) onSubmit(res.data); // Truyền dữ liệu vừa lưu về cho component cha
             setForm({
-                name: '',
-                birthday: '',
+                fullname: '',
+                dob: '',
                 position: '',
                 reason: '',
                 status: '',
@@ -59,11 +59,11 @@ const SanctionForm = ({ onSubmit }) => {
                             <form className="row" onSubmit={handleSubmit}>
                                 <div className="form-group col-md-4">
                                     <label className="control-label">Họ và tên</label>
-                                    <input className="form-control" type="text" name="name" value={form.name} onChange={handleChange}/>
+                                    <input className="form-control" type="text" name="fullname" value={form.fullname} onChange={handleChange}/>
                                 </div>
                                 <div className="form-group col-md-4">
                                     <label className="control-label">Ngày sinh</label>
-                                    <input className="form-control" type="date" name="birthday" value={form.birthday} onChange={handleChange}/>
+                                    <input className="form-control" type="date" name="dob" value={form.dob} onChange={handleChange}/>
                                 </div>
                                 <div className="form-group col-md-4">
                                     <label className="control-label">Chức vụ</label>
