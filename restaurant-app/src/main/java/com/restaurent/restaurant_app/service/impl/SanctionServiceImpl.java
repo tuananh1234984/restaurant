@@ -35,4 +35,16 @@ public class SanctionServiceImpl implements SanctionService {
     public void deleteSanction(Long id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public Sanction updateSanction(Long id, SanctionDTO dto) {
+        Sanction sanction = repository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Sanction not found"));
+        sanction.setFullname(dto.getFullname());
+        sanction.setDob(dto.getDob());
+        sanction.setPosition(dto.getPosition());
+        sanction.setReason(dto.getReason());
+        sanction.setStatus(dto.getStatus());
+        return repository.save(sanction);
+    }
 }

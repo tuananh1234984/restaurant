@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../style/main.css";
 import axios from "axios";
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -6,11 +6,13 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 const SanctionTable = ({ tableRef, data }) => {
     const [search, setSearch] = useState("");
     const [pageSize, setPageSize] = useState(10);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [selectedSanction, setSelectedSanction] = useState(null);
 
     // Lọc dữ liệu theo từ khóa tìm kiếm
     const filteredData = data
         ? data.filter(row =>
-            (row.name || "").toLowerCase().includes(search.toLowerCase()) ||
+            (row.fullname || "").toLowerCase().includes(search.toLowerCase()) ||
             (row.position || "").toLowerCase().includes(search.toLowerCase()) ||
             (row.reason || "").toLowerCase().includes(search.toLowerCase()) ||
             (row.status || "").toLowerCase().includes(search.toLowerCase())
@@ -20,6 +22,44 @@ const SanctionTable = ({ tableRef, data }) => {
     // Hiển thị theo số danh mục đã chọn
     const pagedData = filteredData.slice(0, pageSize);
 
+    // Hàm sửa thông tin
+    const editSanction = (sanction) => {
+        setSelectedSanction(sanction);
+        setShowEditModal(true);
+    };
+
+    // Hàm xử lý lưu thông tin đã sửa
+    const handleEditSave = async (updatedSanction) => {
+        try {
+            // Chỉ gửi các trường cần thiết
+            const payload = {
+                id: updatedSanction.id,
+                fullname: updatedSanction.fullname,
+                dob: updatedSanction.dob,
+                position: updatedSanction.position,
+                reason: updatedSanction.reason,
+                status: updatedSanction.status
+            };
+            await axios.put(
+                `http://localhost:8080/api/auth/sanction/${updatedSanction.id}`,
+                payload,
+                { withCredentials: true }
+            );
+            setShowEditModal(false);
+            setSelectedSanction(null);
+            window.location.reload();
+        } catch (error) {
+            alert("Cập nhật thất bại: " + (error.response?.data?.message || error.message));
+        }
+    };
+
+    // Hàm đóng modal
+    const handleEditCancel = () => {
+        setShowEditModal(false);
+        setSelectedSanction(null);
+    };
+
+
     const deleteSanction = (id) => {
         if (!id) {
             alert("ID không hợp lệ!");
@@ -28,6 +68,7 @@ const SanctionTable = ({ tableRef, data }) => {
         axios.delete(`http://localhost:8080/api/auth/sanction/${id}`, { withCredentials: true })
             .then(response => {
                 // Xử lý cập nhật lại bảng dữ liệu nếu cần
+                window.location.reload(); // hoặc gọi hàm fetch lại data nếu có
             })
             .catch(error => {
                 console.error("Error deleting sanction:", error);
@@ -93,8 +134,8 @@ const SanctionTable = ({ tableRef, data }) => {
                         pagedData.map((row, idx) => (
                             <tr key={idx}>
                                 <td><input type="checkbox" /></td>
-                                <td>{row.name}</td>
-                                <td>{row.birthday || row.birthDate}</td>
+                                <td>{row.fullname}</td>
+                                <td>{row.dob || row.birthDate}</td>
                                 <td>{row.position}</td>
                                 <td>{row.reason}</td>
                                 <td>{getStatusBadge(row.status)}</td>
@@ -109,7 +150,7 @@ const SanctionTable = ({ tableRef, data }) => {
                                     <button
                                         className="btn-action edit"
                                         title="Sửa"
-                                        // onClick={...} // Thêm hàm sửa nếu có
+                                        onClick={() => editSanction(row)}
                                     >
                                         <i className="fa fa-edit"></i>
                                     </button>
@@ -126,8 +167,130 @@ const SanctionTable = ({ tableRef, data }) => {
             <div>
                 Hiện {pagedData.length} / {filteredData.length} danh mục phù hợp
             </div>
+
+            {/* Modal sửa thông tin */}
+            {showEditModal && selectedSanction && (
+                <div className="modal" style={{
+                    display: "block",
+                    background: "rgba(0,0,0,0.3)",
+                    position: "fixed",
+                    top: 0, left: 0, right: 0, bottom: 0,
+                    zIndex: 9999
+                }}>
+                    <div className="modal-dialog" style={{ marginTop: 100 }}>
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Sửa thông tin xử phạt</h5>
+                                <button type="button" className="close" onClick={handleEditCancel}>
+                                    <span>&times;</span>
+                                </button>
+                            </div>
+                            <EditSanctionForm
+                                sanction={selectedSanction}
+                                onSave={handleEditSave}
+                                onCancel={handleEditCancel}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
 
 export default SanctionTable;
+
+// Thêm component EditSanctionForm phía dưới cùng file này
+function EditSanctionForm({ sanction, onSave, onCancel }) {
+    const [form, setForm] = useState({
+        fullname: sanction.fullname || "",
+        dob: sanction.dob || sanction.birthDate || "",
+        position: sanction.position || "",
+        reason: sanction.reason || "",
+        status: sanction.status || "",
+        id: sanction.id // giữ lại id nếu có
+    });
+
+    useEffect(() => {
+        setForm({
+            fullname: sanction.fullname || "",
+            dob: sanction.dob || sanction.birthDate || "",
+            position: sanction.position || "",
+            reason: sanction.reason || "",
+            status: sanction.status || "",
+            id: sanction.id
+        });
+    }, [sanction]);
+
+    const handleChange = e => {
+        const { name, value } = e.target;
+        setForm(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        onSave(form);
+    };
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <div className="modal-body">
+                <div className="form-group">
+                    <label>Họ và Tên</label>
+                    <input
+                        name="fullname"
+                        className="form-control"
+                        value={form.fullname}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Ngày sinh</label>
+                    <input
+                        name="dob"
+                        className="form-control"
+                        value={form.dob}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Chức vụ</label>
+                    <input
+                        name="position"
+                        className="form-control"
+                        value={form.position}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Lý do cấm</label>
+                    <input
+                        name="reason"
+                        className="form-control"
+                        value={form.reason}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Tình trạng</label>
+                    <select
+                        name="status"
+                        className="form-control"
+                        value={form.status}
+                        onChange={handleChange}
+                    >
+                        <option value="">Chọn tình trạng</option>
+                        <option value="Sa thải">Sa thải</option>
+                        <option value="Khóa tài khoản">Khóa tài khoản</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+                </div>
+            </div>
+            <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={onCancel}>Hủy</button>
+                <button type="submit" className="btn btn-primary">Lưu</button>
+            </div>
+        </form>
+    );
+}
