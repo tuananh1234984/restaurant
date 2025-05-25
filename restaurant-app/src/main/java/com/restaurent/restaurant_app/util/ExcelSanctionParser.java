@@ -1,0 +1,83 @@
+package com.restaurent.restaurant_app.util;
+
+import com.restaurent.restaurant_app.dto.SanctionDTO;
+import org.apache.poi.ss.usermodel.*;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class ExcelSanctionParser {
+    public static List<SanctionDTO> parse(InputStream is) throws Exception {
+        List<SanctionDTO> sanctions = new ArrayList<>();
+        Workbook workbook = null;
+        try {
+            workbook = WorkbookFactory.create(is);
+            Sheet sheet = workbook.getSheetAt(0);
+            Iterator<Row> rows = sheet.iterator();
+            if (rows.hasNext()) rows.next(); // Bỏ qua header
+
+            while (rows.hasNext()) {
+                Row row = rows.next();
+                SanctionDTO dto = new SanctionDTO();
+
+                // Đọc field1 an toàn (String)
+                Cell cell1 = row.getCell(0);
+                dto.setName(getCellStringValue(cell1));
+
+                // Đọc field2 an toàn (BigDecimal)
+                Cell cell2 = row.getCell(1);
+                if (cell2 != null && cell2.getCellType() == CellType.NUMERIC) {
+                    dto.setAmount(BigDecimal.valueOf(cell2.getNumericCellValue()));
+                } else {
+                    dto.setAmount(null);
+                }
+
+                // ... thêm các trường khác nếu có, tương tự như trên
+
+                sanctions.add(dto);
+            }
+        } finally {
+            if (workbook != null) {
+                workbook.close();
+            }
+        }
+        return sanctions;
+    }
+
+    // Thêm phương thức tiện ích để lấy giá trị String từ Cell
+    private static String getCellStringValue(Cell cell) {
+        if (cell == null) return null;
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue();
+            case NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    return cell.getDateCellValue().toString();
+                } else {
+                    return String.valueOf(cell.getNumericCellValue());
+                }
+            case BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+            case FORMULA:
+                // Trả về giá trị đã tính toán thay vì công thức
+                FormulaEvaluator evaluator = cell.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator();
+                CellValue cellValue = evaluator.evaluate(cell);
+                switch (cellValue.getCellType()) {
+                    case STRING:
+                        return cellValue.getStringValue();
+                    case NUMERIC:
+                        return String.valueOf(cellValue.getNumberValue());
+                    case BOOLEAN:
+                        return String.valueOf(cellValue.getBooleanValue());
+                    default:
+                        return "";
+                }
+            case BLANK:
+                return "";
+            default:
+                return "";
+        }
+    }
+}

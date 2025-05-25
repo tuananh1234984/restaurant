@@ -47,4 +47,16 @@ public class SanctionServiceImpl implements SanctionService {
         sanction.setStatus(dto.getStatus());
         return repository.save(sanction);
     }
+
+    @Override
+    public void deleteAll() {
+        repository.deleteAll();
+    }
+
+    @Override
+    public void createAllSanctions(List<SanctionDTO> sanctions) {
+        for (SanctionDTO dto : sanctions) {
+            createSanction(dto);
+        }
+    }
 }

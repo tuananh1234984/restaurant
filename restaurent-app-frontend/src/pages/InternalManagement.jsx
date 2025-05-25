@@ -34,14 +34,32 @@ const InternalManagement = () => {
 
     const handleUpload = (event) => {
         const file = event.target.files[0];
-        if(!file) return;
+        if (!file) return;
         const reader = new FileReader();
         reader.onload = (e) => {
             const workbook = XLSX.read(e.target.result, { type: "binary" });
-            const sheetName = workbook.SheetNames[0];;
+            const sheetName = workbook.SheetNames[0];
             const sheet = workbook.Sheets[sheetName];
             const jsonData = XLSX.utils.sheet_to_json(sheet);
-            setData(jsonData);
+            setData(jsonData); // Hiển thị ngay dữ liệu lên bảng
+
+            // Tải file lên backend để lưu vào database
+            const formData = new FormData();
+            formData.append("file", file);
+            axios.post("http://localhost:8080/api/auth/sanction/upload", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            }).then(res => {
+                // Nếu backend trả về dữ liệu mới, cập nhật lại bảng
+                if (Array.isArray(res.data) && res.data.length > 0) {
+                    setData(res.data);
+                }
+                // Nếu không, giữ nguyên dữ liệu vừa đọc từ file
+            }).catch(err => {
+                alert("Tải file lên thất bại!");
+                // Giữ nguyên dữ liệu vừa đọc từ file
+            });
         };
         reader.readAsBinaryString(file);
     };
@@ -91,9 +109,16 @@ const InternalManagement = () => {
         pdf.save("data.pdf");
     }
 
-    const handleDeleteAll = () => {
-        if (window.confirm("Bạn có chắc muốn xóa tất cả không?")){
-            setData([]);
+    const handleDeleteAll = async () => {
+        if (window.confirm("Bạn có chắc chắn muốn xóa tất cả dữ liệu?")){
+            try {
+                await axios.delete("http://localhost:8080/api/auth/sanction/all"); // <-- Sửa lại endpoint này
+                setData([]); // Xóa dữ liệu trong state
+                alert("Đã xóa tất cả dữ liệu thành công!");
+            }catch (error) {
+                alert("Xóa dữ liệu thất bại!");
+                console.error("Error deleting data:", error);
+            }
         }
     };
 
