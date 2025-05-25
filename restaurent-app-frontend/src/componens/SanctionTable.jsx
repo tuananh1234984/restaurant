@@ -9,15 +9,16 @@ const SanctionTable = ({ tableRef, data }) => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedSanction, setSelectedSanction] = useState(null);
 
+    // Đảm bảo data luôn là mảng
+    const safeData = Array.isArray(data) ? data : [];
+
     // Lọc dữ liệu theo từ khóa tìm kiếm
-    const filteredData = data
-        ? data.filter(row =>
-            (row.fullname || "").toLowerCase().includes(search.toLowerCase()) ||
-            (row.position || "").toLowerCase().includes(search.toLowerCase()) ||
-            (row.reason || "").toLowerCase().includes(search.toLowerCase()) ||
-            (row.status || "").toLowerCase().includes(search.toLowerCase())
-        )
-        : [];
+    const filteredData = safeData.filter(row =>
+        (row.fullname || "").toLowerCase().includes(search.toLowerCase()) ||
+        (row.position || "").toLowerCase().includes(search.toLowerCase()) ||
+        (row.reason || "").toLowerCase().includes(search.toLowerCase()) ||
+        (row.status || "").toLowerCase().includes(search.toLowerCase())
+    );
 
     // Hiển thị theo số danh mục đã chọn
     const pagedData = filteredData.slice(0, pageSize);
