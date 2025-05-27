@@ -12,4 +12,6 @@ public class SanctionDTO {
     private String status;
     private BigDecimal amount; // Thêm trường amount nếu cần thiết
     private String name; // Thêm trường name nếu cần thiết
+    private Integer id; // Thêm trường id nếu cần thiết
+
 }

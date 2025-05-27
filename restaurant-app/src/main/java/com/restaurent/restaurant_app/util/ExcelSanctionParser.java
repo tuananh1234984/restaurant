@@ -21,21 +21,12 @@ public class ExcelSanctionParser {
             while (rows.hasNext()) {
                 Row row = rows.next();
                 SanctionDTO dto = new SanctionDTO();
-
-                // Đọc field1 an toàn (String)
-                Cell cell1 = row.getCell(0);
-                dto.setName(getCellStringValue(cell1));
-
-                // Đọc field2 an toàn (BigDecimal)
-                Cell cell2 = row.getCell(1);
-                if (cell2 != null && cell2.getCellType() == CellType.NUMERIC) {
-                    dto.setAmount(BigDecimal.valueOf(cell2.getNumericCellValue()));
-                } else {
-                    dto.setAmount(null);
-                }
-
-                // ... thêm các trường khác nếu có, tương tự như trên
-
+                dto.setId(getCellIntValue(row.getCell(0)));
+                dto.setFullname(getCellStringValue(row.getCell(1)));
+                dto.setDob(getCellStringValue(row.getCell(2)));
+                dto.setPosition(getCellStringValue(row.getCell(3)));
+                dto.setReason(getCellStringValue(row.getCell(4)));
+                dto.setStatus(getCellStringValue(row.getCell(5)));
                 sanctions.add(dto);
             }
         } finally {
@@ -78,6 +69,23 @@ public class ExcelSanctionParser {
                 return "";
             default:
                 return "";
+        }
+    }
+
+    // Thêm phương thức tiện ích để lấy giá trị int từ Cell
+    private static Integer getCellIntValue(Cell cell) {
+        if (cell == null) return null;
+        switch (cell.getCellType()) {
+            case NUMERIC:
+                return (int) cell.getNumericCellValue();
+            case STRING:
+                try {
+                    return Integer.parseInt(cell.getStringCellValue());
+                } catch (NumberFormatException e) {
+                    return null;
+                }
+            default:
+                return null;
         }
     }
 }

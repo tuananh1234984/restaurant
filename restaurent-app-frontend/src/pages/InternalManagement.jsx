@@ -10,9 +10,9 @@ import Clock from "../componens/Clock";
 import axios from "axios";
 
 const InternalManagement = () => {
-    const [isFixed, setIsFixed] = useState(false);
     const [data, setData] = useState([]);
     const [showForm, setShowForm] = useState(false);
+    const [isFixed, setIsFixed] = useState(false);
     const tableRef = useRef(null);
     const fileInputRef = useRef(null); // Thêm ref cho input file
 
@@ -28,7 +28,8 @@ const InternalManagement = () => {
     };
 
     const handleLinkClick = () => {
-        setShowForm(true); // Hiện form khi bấm "Tạo mới"
+        // Nhấn vào "Tạo mới" sẽ ẩn bảng và hiện form
+        setShowForm(true);
         setIsFixed(true);
     };
 
@@ -131,68 +132,81 @@ const InternalManagement = () => {
         <main className={`app-content ${isFixed ? "fixed" : ""}`}>
             <div className="app-title">
                 <ul className="app-breadcrumb breadcrumb side">
-                    <li className="breadcrumb-item active"><b>Quản lý nội bộ</b></li>
+                    <li className="breadcrumb-item">
+                        <b>Quản lý nội bộ</b>
+                    </li>
+                    {showForm && (
+                        <li className="breadcrumb-item">
+                            <span>Tạo mới</span>
+                        </li>
+                    )}
                 </ul>
                 <div id="clock"><Clock /></div>
             </div>
-            <div className="row">
-                <div className="col-md-12">
-                    <div className="tile">
-                        <div className="tile-body">
-                            <div className="row element-button">
-                                <div className="col-sm-2">
-                                    <button className="btn btn-add btn-sm" onClick={handleLinkClick} title="Thêm">
-                                        <i className="fas fa-plus"></i>Tạo mới
-                                    </button>
+            {showForm ? (
+                <SanctionForm
+                    onSubmit={handleAddSanction}
+                    onCancel={() => {
+                        setShowForm(false);
+                        setIsFixed(false);
+                    }}
+                />
+            ) : (
+                <div className="row">
+                    <div className="col-md-12">
+                        <div className="tile">
+                            <div className="tile-body">
+                                <div className="row element-button">
+                                    <div className="col-sm-2">
+                                        <button className="btn btn-add btn-sm" onClick={handleLinkClick} title="Thêm">
+                                            <i className="fas fa-plus"></i>Tạo mới
+                                        </button>
+                                    </div>
+                                    <div className="col-sm-2">
+                                        <button className="btn btn-delete btn-sm nhap-tu-file" type="button" title="Nhập" onClick={handleUploadClick}>
+                                            <i className="fas fa-file-upload"></i>Tải từ file
+                                        </button>
+                                        {/* Input file ẩn */}
+                                        <input
+                                            type="file"
+                                            accept=".xlsx, .xls"
+                                            ref={fileInputRef}
+                                            style={{ display: "none" }}
+                                            onChange={handleUpload}
+                                        />
+                                    </div>
+                                    <div className="col-sm-2">
+                                        <button className="btn btn-delete btn-sm print-file" type="button" title="In" onClick={handlePrint}>
+                                            <i className="fas fa-print"></i>In dữ liệu
+                                        </button>
+                                    </div> 
+                                    <div className="col-sm-2">
+                                        <button className="btn btn-delete btn-sm print-file js-testareaccopybtn" type="button" title="Sao chép" onClick={handleCopy}>
+                                            <i className="fas fa-copy"></i>Sao chép
+                                        </button>
+                                    </div>
+                                    <div className="col-sm-2">
+                                        <button className="btn btn-excel btn-sm" type="button" title="Xuất Excel" onClick={handleExportExcel}>
+                                            <i className="fas fa-file-excel"></i>Xuất Excel
+                                        </button>
+                                    </div>
+                                    <div className="col-sm-2">
+                                        <button className="btn btn-delete btn-sm pdf-file" type="button" title="Xuất PDF" onClick={handleExportPDF}>
+                                            <i className="fas fa-file-pdf"></i>Xuất PDF
+                                        </button>
+                                    </div>
+                                    <div className="col-sm-2">
+                                        <button className="btn btn-delete btn-sm" type="button" title="Xóa tất cả" onClick={handleDeleteAll}>
+                                            <i className="fas fa-trash-alt"></i>Xóa tất cả
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className="col-sm-2">
-                                    <button className="btn btn-delete btn-sm nhap-tu-file" type="button" title="Nhập" onClick={handleUploadClick}>
-                                        <i className="fas fa-file-upload"></i>Tải từ file
-                                    </button>
-                                    {/* Input file ẩn */}
-                                    <input
-                                        type="file"
-                                        accept=".xlsx, .xls"
-                                        ref={fileInputRef}
-                                        style={{ display: "none" }}
-                                        onChange={handleUpload}
-                                    />
-                                </div>
-                                <div className="col-sm-2">
-                                    <button className="btn btn-delete btn-sm print-file" type="button" title="In" onClick={handlePrint}>
-                                        <i className="fas fa-print"></i>In dữ liệu
-                                    </button>
-                                </div> 
-                                <div className="col-sm-2">
-                                    <button className="btn btn-delete btn-sm print-file js-testareaccopybtn" type="button" title="Sao chép" onClick={handleCopy}>
-                                        <i className="fas fa-copy"></i>Sao chép
-                                    </button>
-                                </div>
-                                <div className="col-sm-2">
-                                    <button className="btn btn-excel btn-sm" type="button" title="Xuất Excel" onClick={handleExportExcel}>
-                                        <i className="fas fa-file-excel"></i>Xuất Excel
-                                    </button>
-                                </div>
-                                <div className="col-sm-2">
-                                    <button className="btn btn-delete btn-sm pdf-file" type="button" title="Xuất PDF" onClick={handleExportPDF}>
-                                        <i className="fas fa-file-pdf"></i>Xuất PDF
-                                    </button>
-                                </div>
-                                <div className="col-sm-2">
-                                    <button className="btn btn-delete btn-sm" type="button" title="Xóa tất cả" onClick={handleDeleteAll}>
-                                        <i className="fas fa-trash-alt"></i>Xóa tất cả
-                                    </button>
-                                </div>
+                                <SanctionTable tableRef={tableRef} data={data} />
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {/* Chỉ render form khi showForm = true */}
-            {showForm && (
-                <SanctionForm onSubmit={handleAddSanction} />
             )}
-            <SanctionTable tableRef={tableRef} data={data} />
         </main>
     );
 };
