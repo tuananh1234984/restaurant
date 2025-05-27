@@ -2,7 +2,7 @@ import React, { useState} from "react";
 import axios from "axios";
 import "../style/main.css";
 
-const SanctionForm = ({ onSubmit }) => {
+const SanctionForm = ({ onSubmit, onCancel }) => {
     const [form, setForm] = useState({
         fullname: '',
         dob: '',
@@ -37,13 +37,6 @@ const SanctionForm = ({ onSubmit }) => {
     };
 
     return(
-        <main className="app-content">
-            <div className="app-title">
-                <ul className="app-breadcrumb breadcrumb">
-                    <li className="breadcrumb-item">Quản lý nội bộ</li>
-                    <li className="breadcrumb-item"><span>Tạo mới</span></li>
-                </ul>
-            </div>
             <div className="row">
                 <div className="col-md-12">
                     <div className="tile">
@@ -95,13 +88,12 @@ const SanctionForm = ({ onSubmit }) => {
                             </form>
                             <div className="tile-footer mt-3">
                                 <button className="btn btn-save" type="button" onClick={handleSubmit}>Lưu lại</button>
-                                <button className="btn btn-cancel" type="button">Hủy bỏ</button>
+                                <button className="btn btn-cancel" type="button" onClick={onCancel}>Hủy bỏ</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
     );
 };
 
