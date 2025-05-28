@@ -1,6 +1,9 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import ReactDOM from "react-dom";
 import "../style/main.css";
+
+const DEFAULT_STATUSES = ["Sa thải", "Khóa tài khoản"];
 
 const SanctionForm = ({ onSubmit, onCancel }) => {
     const [form, setForm] = useState({
@@ -10,6 +13,9 @@ const SanctionForm = ({ onSubmit, onCancel }) => {
         reason: '',
         status: '',
     });
+    const [statuses, setStatuses] = useState(DEFAULT_STATUSES);
+    const [showModal, setShowModal] = useState(false);
+    const [newStatus, setNewStatus] = useState('');
 
     const handleChange = (e) => {
         setForm({
@@ -21,9 +27,8 @@ const SanctionForm = ({ onSubmit, onCancel }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Gửi dữ liệu lên backend
             const res = await axios.post("/api/auth/sanction", form);
-            if (onSubmit) onSubmit(res.data); // Truyền dữ liệu vừa lưu về cho component cha
+            if (onSubmit) onSubmit(res.data);
             setForm({
                 fullname: '',
                 dob: '',
@@ -36,7 +41,18 @@ const SanctionForm = ({ onSubmit, onCancel }) => {
         }
     };
 
-    return(
+    const handleAddStatus = (e) => {
+        e.preventDefault();
+        if (newStatus && !statuses.includes(newStatus)) {
+            setStatuses([...statuses, newStatus]);
+            setForm({ ...form, status: newStatus });
+        }
+        setNewStatus('');
+        setShowModal(false);
+    };
+
+    return (
+        <>
             <div className="row">
                 <div className="col-md-12">
                     <div className="tile">
@@ -44,8 +60,15 @@ const SanctionForm = ({ onSubmit, onCancel }) => {
                         <div className="tile-body">
                             <div className="row element-button">
                                 <div className="col-sm-2">
-                                    <button className="btn btn-add btn-sm">
-                                        <b><i className="fas fa-folder-plus"></i>Tạo tình trạng mới</b>
+                                    <button
+                                        className="btn btn-add btn-sm"
+                                        type="button"
+                                        onClick={() => setShowModal(true)}
+                                    >
+                                        <b>
+                                            <i className="fas fa-folder-plus"></i>
+                                            Tạo tình trạng mới
+                                        </b>
                                     </button>
                                 </div>
                             </div>
@@ -79,10 +102,16 @@ const SanctionForm = ({ onSubmit, onCancel }) => {
                                 </div>
                                 <div className="form-group col-md-4">
                                     <label className="control-label">Tình trạng</label>
-                                    <select className="form-control" name="status" value={form.status} onChange={handleChange}>\
+                                    <select
+                                        className="form-control"
+                                        name="status"
+                                        value={form.status}
+                                        onChange={handleChange}
+                                    >
                                         <option value="">-- Chọn tình trạng --</option>
-                                        <option>Sa thải</option>
-                                        <option>Khóa tài khoản</option>
+                                        {statuses.map((status, idx) => (
+                                            <option key={idx} value={status}>{status}</option>
+                                        ))}
                                     </select>
                                 </div>
                             </form>
@@ -94,6 +123,53 @@ const SanctionForm = ({ onSubmit, onCancel }) => {
                     </div>
                 </div>
             </div>
+            {/* Đặt modal ở ngoài cùng, không lồng trong .row hay .tile */}
+            {showModal && ReactDOM.createPortal(
+                <>
+                    <div
+                        className="modal fade show"
+                        tabIndex={-1}
+                        style={{
+                            display: "block",
+                            zIndex: 1051, // Đảm bảo cao hơn backdrop
+                            paddingRight: "15px",
+                        }}
+                    >
+                        <div className="modal-dialog modal-dialog-centered">
+                            <div className="modal-content">
+                                <div className="modal-body">
+                                    <div className="row">
+                                        <div className="form-group col-md-12">
+                                            <h5>Tạo tình trạng mới</h5>
+                                        </div>
+                                        <div className="form-group col-md-12">
+                                            <label className="control-label">Nhập tình trạng</label>
+                                            <input
+                                                className="form-control"
+                                                type="text"
+                                                value={newStatus}
+                                                onChange={e => setNewStatus(e.target.value)}
+                                                required
+                                                autoFocus
+                                            />
+                                        </div>
+                                        <div className="form-group col-md-12 mt-2">
+                                            <button className="btn btn-save" type="button" onClick={handleAddStatus}>Lưu lại</button>
+                                            <button className="btn btn-cancel ms-2" type="button" onClick={() => setShowModal(false)}>Hủy bỏ</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        className="modal-backdrop fade show"
+                        style={{ zIndex: 1050 }}
+                    ></div>
+                </>,
+                document.body
+            )}
+        </>
     );
 };
 
