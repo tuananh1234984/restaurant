@@ -7,6 +7,7 @@ import InternalManagement from "./pages/InternalManagement";
 import SanctionForm from "./componens/SanctionForm";
 import Login from "./pages/login";
 import ForgotPassword from "./pages/forgot-password";
+import EmployeeManagement from "./pages/EmployeeManagement";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/SanctionForm" element={<SanctionForm />} />
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/employee-management" element={<EmployeeManagement />} />
         </Routes>
       </div>
     </Router>

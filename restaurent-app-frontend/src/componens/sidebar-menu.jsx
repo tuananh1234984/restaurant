@@ -66,8 +66,12 @@ const SidebarMenu = () => {
                     <span className="app-menu_label">POS Bán Hàng</span></a></li>
                 <li><a className="app-menu_item active" href="index.html"><i className="app-menu_icon bx bx-tachometer"></i>
                     <span className="app-menu_label">Bảng điều khiển</span></a></li>
-                <li><a className="app-menu_item " href="index.html"><i className="app-menu_icon bx bx-id-card"></i>
-                    <span className="app-menu_label">Quản lý nhân viên</span></a></li>
+                <li>
+                  <Link className="app-menu_item " to="/employee-management" onClick={handleLinkClick}>
+                    <i className="app-menu_icon bx bx-id-card"></i>
+                    <span className="app-menu_label">Quản lý nhân viên</span>
+                  </Link>
+                </li>
                 <li><a className="app-menu_item " href="index.html"><i className="app-menu_icon bx bx-user-voice"></i>
                     <span className="app-menu_label">Quản lý Khách hàng</span></a></li>
                 <li><a className="app-menu_item " href="index.html"><i className="app-menu_icon bx bx-purchase-tag-alt"></i>
@@ -90,4 +94,4 @@ const SidebarMenu = () => {
     )
 };
 
-export default SidebarMenu
+export default SidebarMenu;
