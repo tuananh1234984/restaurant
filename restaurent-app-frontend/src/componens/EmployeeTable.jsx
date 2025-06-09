@@ -31,6 +31,13 @@ const EmployeeTable = () => {
         }
     };
 
+    const deleteAllEmployees = () => {
+        if (window.confirm("Bạn có chắc muốn xóa tất cả nhân viên?")) {
+            axios.delete("http://localhost:8080/api/auth/employee/all")
+                .then(() => window.location.reload());
+        }
+    };
+
     return (
         <div className="tile">
             <div className="row element-button">
@@ -53,7 +60,7 @@ const EmployeeTable = () => {
                     <button className="btn btn-delete btn-sm pdf-file" title="Thêm"><i className="fas fa-file-pdf"></i>Xuất PDF</button>
                 </div>
                 <div className="col-sm-2">
-                    <button className="btn btn-delete btn-sm" title="Thêm"><i className="fas fa-trash-alt"></i>Xóa tất cả</button>
+                    <button className="btn btn-delete btn-sm" title="Thêm" onClick={deleteAllEmployees}><i className="fas fa-trash-alt"></i>Xóa tất cả</button>
                 </div>
             </div>
             <div className="row mb-2">
