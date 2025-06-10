@@ -48,14 +48,14 @@ public class EmployeeController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("api/auth/employees/upload")
+    @PostMapping("/upload")
     public ResponseEntity<?> uploadEmployeeFile(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("File is empty");
         }
         try (InputStream is = file.getInputStream()) {
-            List<EmployeeDTO> employees = ExcelEmployeeParser.parse(is); // Bạn cần tự viết class này
-            employeeService.createAllEmployees(employees); // Thêm hàm này vào service
+            List<EmployeeDTO> employees = ExcelEmployeeParser.parse(is); 
+            employeeService.createAllEmployees(employees);
             return ResponseEntity.ok(employeeService.getAllEmployees());
         } catch (Exception e) {
             e.printStackTrace();
