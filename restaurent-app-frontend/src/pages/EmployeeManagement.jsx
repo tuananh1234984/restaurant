@@ -18,7 +18,8 @@ const EmployeeManagement = () => {
 
     // Lấy dữ liệu từ backend khi load trang
     useEffect(() => {
-        axios.get("http://localhost:8080/api/auth/employee").then(res => setData(res.data));
+        axios.get("http://localhost:8080/api/auth/employees")
+            .then(res => setData(res.data));
     }, []);
 
     // Thêm mới nhân viên

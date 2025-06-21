@@ -9,7 +9,7 @@ const EmployeeTable = () => {
 
     // Lấy dữ liệu nhân viên từ backend khi load trang
     useEffect(() => {
-        axios.get("http://localhost:8080/api/auth/employee")
+        axios.get("http://localhost:8080/api/auth/employees")
             .then(res => setEmployees(res.data))
             .catch(() => setEmployees([]));
     }, []);
@@ -39,30 +39,7 @@ const EmployeeTable = () => {
     };
 
     return (
-        <div className="tile">
-            <div className="row element-button">
-                <div className="col-sm-2">
-                    <button className="btn btn-add btn-sm" title="Thêm"><i className="fas fa-plus"></i> Tạo mới nhân viên</button>
-                </div>
-                <div className="col-sm-2">
-                    <button className="btn btn-delete btn-sm nhap-tu-file" title="Thêm"><i className="fas fa-file-upload"></i>Tải từ file</button>
-                </div>
-                <div className="col-sm-2">
-                    <button className="btn btn-delete btn-sm print-file" title="Thêm"><i className="fas fa-print"></i>In dữ liệu</button>
-                </div>
-                <div className="col-sm-2">
-                    <button className="btn btn-delete btn-sm print-file js-testareaccopybtn" title="Thêm"><i className="fas fa-copy"></i>Sao chép</button>
-                </div>
-                <div className="col-sm-2">
-                    <button className="btn btn-excel btn-sm" title="Thêm"><i className="fas fa-file-excel"></i>Xuất excel</button>
-                </div>
-                <div className="col-sm-2">
-                    <button className="btn btn-delete btn-sm pdf-file" title="Thêm"><i className="fas fa-file-pdf"></i>Xuất PDF</button>
-                </div>
-                <div className="col-sm-2">
-                    <button className="btn btn-delete btn-sm" title="Thêm" onClick={deleteAllEmployees}><i className="fas fa-trash-alt"></i>Xóa tất cả</button>
-                </div>
-            </div>
+        <>
             <div className="row mb-2">
                 <div className="col-sm-6">
                     <label>
@@ -141,7 +118,7 @@ const EmployeeTable = () => {
             <div>
                 Hiện {pagedData.length} / {filtered.length} nhân viên phù hợp
             </div>
-        </div>
+        </>
     );
 };
 
