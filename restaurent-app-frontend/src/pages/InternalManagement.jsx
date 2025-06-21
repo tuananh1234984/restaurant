@@ -11,6 +11,7 @@ import axios from "axios";
 
 const InternalManagement = () => {
     const [data, setData] = useState([]);
+    const [employees, setEmployees] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [isFixed, setIsFixed] = useState(false);
     const tableRef = useRef(null);
@@ -19,6 +20,8 @@ const InternalManagement = () => {
     // Lấy dữ liệu từ backend khi load trang
     useEffect(() => {
         axios.get("http://localhost:8080/api/auth/sanction").then(res => setData(res.data));
+        axios.get("http://localhost:8080/api/auth/employees")
+            .then(res => setEmployees(res.data))
     }, []);
 
     // Khi thêm mới thành công, cập nhật bảng
